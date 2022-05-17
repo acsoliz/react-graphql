@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { gql, useQuery } from '@apollo/client';
+
+const ALL_PERSONS = gql`
+	query {
+		allPersons {
+			name
+			phone
+			address {
+				street
+				city
+			}
+		}
+	}
+`;
 
 function App() {
-	useEffect(() => {
-		fetch('http://localhost:4000/', {
-			method  : 'POST',
-			headers : { 'Content-Type': 'application/json' },
-			body    : JSON.stringify({
-				query : `query {
-          allPersons{
-            name
-            phone
-          }
-        }`
-			})
-		})
-			.then((res) => res.json())
-			.then((res) => {
-				console.log('Soy la respuesta del fetch', res);
-			});
-	});
+	const { data, error, loading } = useQuery(ALL_PERSONS);
+	// console.log(result);// lo mas importante: data, error y loading,
 
+	if (error) return <span style="color: red">{error}</span>;
 	return (
 		<div className="App">
 			<header className="App-header">
 				<img src={logo} className="App-logo" alt="logo" />
-				<p>GraphQl + React!</p>
+				{
+					loading ? <p>Loading...</p> :
+          <>
+					<p>GraphQl + React!</p>
+          {data && data.allPersons.map(person => person.name).join(", ")}
+          
+          </>
+          }
 
 				<p>
 					Edit <code>App.jsx</code> and save to test HMR updates.
