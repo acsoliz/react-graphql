@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 
-const FIND_PERSON = gql`
+export const FIND_PERSON = gql`
 	query findPersonByName($nameToSearch: String!) {
 		findPerson(name: $nameToSearch) {
 			name
@@ -15,7 +15,7 @@ const FIND_PERSON = gql`
 	}
 `;
 
-const Persons = ({ persons }) => {
+export const Persons = ({ persons }) => {
 	const [ getPerson, result ] = useLazyQuery(FIND_PERSON); // un array con dos posiciones
 	const [ person, setPerson ] = useState(null);
 
@@ -60,5 +60,3 @@ const Persons = ({ persons }) => {
 		</div>
 	);
 };
-
-export default Persons;
