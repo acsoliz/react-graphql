@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { gql, useQuery } from '@apollo/client';
+import Persons from './Components/Persons';
+import PersonForm from './Components/PersonForm';
 
 const ALL_PERSONS = gql`
 	query {
@@ -17,7 +19,8 @@ const ALL_PERSONS = gql`
 `;
 
 function App() {
-	const { data, error, loading } = useQuery(ALL_PERSONS);
+	const { data, error, loading } = useQuery(ALL_PERSONS, {pollInterval:2000});
+	//PollIn cada 2'' hara una nueva peticion para ver si huvo un cambio
 	// console.log(result);// lo mas importante: data, error y loading,
 
 	if (error) return <span style="color: red">{error}</span>;
@@ -27,31 +30,14 @@ function App() {
 				<img src={logo} className="App-logo" alt="logo" />
 				{
 					loading ? <p>Loading...</p> :
-          <>
-					<p>GraphQl + React!</p>
-          {data && data.allPersons.map(person => person.name).join(", ")}
+          <Persons persons={data?.allPersons}/>
           
-          </>
           }
 
-				<p>
-					Edit <code>App.jsx</code> and save to test HMR updates.
-				</p>
-				<p>
-					<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-						Learn React
-					</a>
-					{' | '}
-					<a
-						className="App-link"
-						href="https://vitejs.dev/guide/features.html"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Vite Docs
-					</a>
-				</p>
+			
+			<PersonForm/>
 			</header>
+			
 		</div>
 	);
 }

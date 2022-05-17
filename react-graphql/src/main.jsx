@@ -5,8 +5,9 @@ import './index.css';
 import { ApolloClient, ApolloProvider, HttpLink, gql, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-	cache : new InMemoryCache(),
-	link  : new HttpLink({
+	connectToDevTools : true,
+	cache             : new InMemoryCache(),
+	link              : new HttpLink({
 		uri : 'http://localhost:4000' // debera ir la variables de entorno
 	})
 });
